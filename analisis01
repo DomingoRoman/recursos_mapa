@@ -1,0 +1,487 @@
+# MAPA PROSÓDICO DE CHILE
+#####
+
+# Elegir la carpeta con los audios
+# crear carpeta tabalasG
+# crear carpeta tablasE
+# crear carpeta Graficos
+# string objects sonidos
+# for: Hacer el pitch object para cada sound 
+# beginPause
+# visualización y editar
+# mediciones
+# tablas específicas y guardar
+# tablas generales y guardar
+# gráficos y guardar
+# draw gráficos
+# endPause
+# endfor
+# 
+#
+
+#Elegir la carpeta de sonidos y crear dos carpetas. 
+#Poner el nombre del directorio de sonidos completo
+directorioOriginalSonidos$ = chooseDirectory$: "Elige la carpeta de sonidos"
+createDirectory: directorioOriginalSonidos$ + "/generales"
+createDirectory: directorioOriginalSonidos$ + "/especificas"
+createDirectory: directorioOriginalSonidos$ + "/graficos"
+
+#Crear un objeto string con los nombre de todos los archivos de sonido (que terminan en ".TextGrid").
+lista_sonido = Create Strings as file list: "lista_sonido", directorioOriginalSonidos$ + "\*.wav"
+nTotalSonido = Get number of strings
+estrato = 1
+
+form Imprimir f0 en puntos...
+	real piso 70
+	real techo 450
+	boolean inifin yes
+	boolean stPromedio yes
+	boolean escuchar
+endform
+
+for iSonido to nTotalSonido
+	selectObject: lista_sonido
+	nombreSonido$ = Get string: iSonido
+	nombreBase$ = nombreSonido$ - ".wav"
+	textgrid$ = nombreSonido$ - ".wav" + ".TextGrid"
+	pitch$ = nombreSonido$ - ".wav" + ".Pitch"
+	textgrid = Read from file: directorioOriginalSonidos$ + "\" + textgrid$
+	sonido = Read from file: directorioOriginalSonidos$ + "\" + nombreSonido$
+	selectObject: textgrid, sonido
+ 	View & Edit
+	selectObject: sonido
+	#Play
+	pitch = To Pitch: 0, 75, 600
+	View & Edit
+	
+	beginPause: "Verifique que los puntos marcados en el textGrid tengan valor de F0"
+		comment: "Al terminar de etiquetar, pulsar el botón siguiente"
+	endPause: "Listo", 1
+	
+		
+###################################
+### extrae duración del audio
+###################################
+select textgrid
+duracion_sonido = Get total duration
+
+
+###################################
+### extrae información para el eje vertical del gráfico
+### las variables 'tramo' y 'subtramo'
+### indicarán los pasos en el eje vertical del gráfico en Hz
+###################################
+
+tramo = techo div 5
+subtramo = tramo div 2
+
+###################################
+### extrae informacion codificada en el nombre del archivo
+###################################
+
+largo_nombre = length (textgrid$)
+zona$ = left$ (textgrid$, 1)
+condicion$ = mid$(textgrid$,2,1)
+sexo$ = mid$(textgrid$,4,1)
+n_informante$ = mid$(textgrid$,5,1)
+prueba$ = mid$(textgrid$,7,3)
+
+appendInfoLine:  largo_nombre, tab$, textgrid$ 
+
+# condicion para quienes pusieron numero de ítem
+# con un solo digito
+
+if largo_nombre = 25
+	item$ = mid$ (textgrid$,11,1)
+endif
+
+if largo_nombre =26
+	item$ = mid$ (textgrid$,11,2)
+endif
+appendInfoLine: item$
+ 
+select textgrid
+
+prueba = Is interval tier... estrato
+
+if prueba = 1
+	exit El estrato debe ser de punto'newline$'
+endif
+
+puntos = Get number of points... estrato
+puntoIniTiempo = Get time of point: estrato, 1
+puntoFinTiempo = Get time of point: estrato, puntos
+
+###################################
+#### Creación de tabla con datos especificos
+###################################
+
+
+tablaValEsp = Create Table with column names: textgrid$, puntos, "audio vocal tiempo Hz XHz StAlX zona condicion sexo n_informante prueba item"
+
+
+for i to puntos
+	select textgrid
+		tiempo = Get time of point... estrato i
+		etiqueta$ = Get label of point... estrato i
+	select pitch
+		f0 = Get value at time... tiempo Hertz Linear
+### Quiebra ejecución del script
+### para iniciarlo de nuevo
+			if f0 = undefined
+			pauseScript: "Corrija::::  ",etiqueta$," en tiempo::: ",tiempo
+			endif
+
+	select tablaValEsp
+		Set string value: i, "audio", textgrid$
+		Set string value: i, "vocal", etiqueta$
+		Set numeric value: i, "tiempo", tiempo
+		Set numeric value: i, "Hz", f0
+		Set string value: i, "zona", zona$
+		Set string value: i, "condicion", condicion$
+		Set string value: i, "sexo", sexo$
+		Set string value: i, "n_informante", n_informante$
+		Set string value: i, "prueba", prueba$
+		Set string value: i, "item", item$
+endfor
+
+# Obtiene datos para la tabla general
+xf0_estilizado = Get mean: "Hz"
+min = Get minimum: "Hz"
+max = Get maximum: "Hz"
+stMinMax = (log2(max/min)*12)
+stMin_X = (log2(xf0_estilizado/min)*12)
+stMax_X = (log2(xf0_estilizado/max)*12)
+
+
+###################################
+###################################
+#### para el gráfico en st
+###################################
+###################################
+
+st_inf =(((stMin_X) + 2)*-1)
+st_sup = (((stMax_X) + 2)*-1)
+
+for i to puntos
+	Set numeric value: i, "XHz", xf0_estilizado
+endfor
+
+for i to puntos
+	select textgrid
+		tiempo = Get time of point... estrato i
+	select pitch
+		f0 = Get value at time... tiempo Hertz Linear
+	select tablaValEsp
+	stalX =	(log2(f0/xf0_estilizado )*12)
+	Set numeric value: i, "StAlX", stalX
+endfor
+
+# Calcula la pendiente entre Inicio y Fin
+
+select tablaValEsp
+f0_inicio = Get value: 1, "Hz"
+f0_final = Get value: puntos, "Hz"
+Remove column: "audio"
+
+# Cálculo de pendiente y velocidad
+pendiente = (f0_final-f0_inicio)/(puntoFinTiempo-puntoIniTiempo)
+velocidad = puntos-1/(puntoFinTiempo-puntoIniTiempo)
+
+
+#################################################################
+#### Creación de tabla con datos generales de cada enunciado ####
+#################################################################
+
+tablaValGenerales = Create Table with column names: textgrid$, 1, "Zona Condicion Sexo n_Informante Prueba Item Pendiente Velocidad XHz Min Max StMinMax StMin_X StMax_X Duracion_audio"
+
+Set string value: 1, "Zona", zona$
+Set string value: 1, "Condicion", condicion$
+Set string value: 1, "Sexo", sexo$
+Set string value: 1, "n_Informante", n_informante$
+Set string value: 1, "Prueba", prueba$
+Set string value: 1, "Item", item$
+Set numeric value: 1, "Pendiente", pendiente
+Set numeric value: 1, "Velocidad", velocidad
+Set numeric value: 1, "XHz", xf0_estilizado
+Set numeric value: 1, "Min", min
+Set numeric value: 1, "Max", max
+Set numeric value: 1, "StMinMax", stMinMax
+Set numeric value: 1, "StMin_X", stMin_X
+Set numeric value: 1, "StMax_X", stMax_X
+Set numeric value: 1, "Duracion_audio", duracion_sonido
+
+#################################################################
+## GRAFICOS ##
+#################################################################
+
+
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+## PRIMER GRÁFICO: EN HZ ##
+#################################################################
+#################################################################
+#################################################################
+#################################################################
+
+
+Erase all
+
+tier_tono_Hz = Create PitchTier: "tono", 0, duracion_sonido
+
+Select inner viewport: 0.5, 7, 0.5, 3
+Axes: 0, duracion_sonido, piso, techo
+
+
+#################################################################
+## Pone las etiquetas donde corresponde
+#################################################################
+
+
+for i to puntos
+	select textgrid
+		tiempo = Get time of point... estrato i
+		etiqueta$ = Get label of point... estrato i
+	select pitch
+		f0 = Get value at time... tiempo Hertz Linear
+	select tier_tono_Hz
+		Add point: tiempo, f0
+	One mark bottom: tiempo, "no", "yes", "yes", etiqueta$
+endfor
+
+
+
+#################################################################
+## traza el pitch original ##
+#################################################################
+
+Grey
+Line width: 3
+select pitch
+Draw: 0, 0, piso, techo, "no"
+Line width: 1
+
+
+#################################################################
+## traza el pitch estilizado ##
+#################################################################
+Black
+select tier_tono_Hz
+Draw: 0, 0, piso, techo, "no", "lines"
+
+
+#################################################################
+## borra inicio y final sobrante del estilizado ##
+#################################################################
+White
+Line width: 3
+Draw line: 0.0001, f0_inicio, puntoIniTiempo, f0_inicio
+Draw line: puntoFinTiempo, f0_final, duracion_sonido, f0_final
+Line width: 1
+
+#################################################################
+## pone puntos rojos en cada valor de vocal ##
+#################################################################
+Red
+Line width: 2.5
+Draw: 0, 0, piso, techo, "no", "speckles"
+Line width: 1
+Black
+
+
+#################################################################
+## traza línea promedio f0 ##
+#################################################################
+
+Red
+Line width: 0.5
+Solid line
+Draw line: 0, xf0_estilizado, duracion_sonido, xf0_estilizado
+One mark left: xf0_estilizado, "no", "no", "no", "X"
+
+#################################################################
+## traza pendiente de f0 ##
+#################################################################
+Green
+Dashed line
+Line width: 1.5
+Draw arrow: puntoIniTiempo, f0_inicio, puntoFinTiempo, f0_final
+Solid line
+
+#################################################################
+## traza líneas máximos y mínimos ##
+#################################################################
+Blue
+Line width: 1.5
+Dashed line
+Draw line: 0, min, duracion_sonido, min
+Draw line: 0, max, duracion_sonido, max
+
+
+
+#################################################################
+## traza marcos y tramos ##
+#################################################################
+
+Solid line
+Line width: 1
+Black
+Draw inner box
+Marks right every: 1, tramo, "yes", "yes", "yes"
+Marks right every: 1, subtramo, "no", "yes", "yes"
+
+
+
+
+
+#################################################################
+## redimensión del gráfico (1) para ser guardado
+## renombramiento y salvación
+#################################################################
+Select outer viewport: 0.3, 7.3, 0.4, 3.3
+extensionGraf1$ = "_HzX.png"
+nombreGraf1$= nombreBase$ + extensionGraf1$
+Save as 600-dpi PNG file: directorioOriginalSonidos$ + "/graficos/" + nombreGraf1$
+
+
+#################################################################
+#################################################################
+#################################################################
+## SEGUNDO GRÁFICO: SEMITONOS REFERIDO AL PROMEDIO
+#################################################################
+#################################################################
+#################################################################
+
+Select inner viewport: 0.5, 7, 4, 6.5
+
+#################################################################
+### límites superior e inferior para el gráfico de st
+#################################################################
+
+
+#### MISTERIO ¿Por qué + 6 es en la práctica + 4?
+
+lim_inf = st_inf - 2
+lim_sup = st_sup + 6
+
+Axes: 0, duracion_sonido, lim_inf, lim_sup
+
+dif_en_graf_max_min = stMinMax + 8 
+
+if dif_en_graf_max_min > 10
+	tramo_inicial = 2
+	else tramo = 1
+endif
+
+
+One mark right: 0, "no", "yes", "yes", "X"
+Marks left every: 1, tramo_inicial, "yes", "yes", "yes"
+
+White
+Draw line: 0, 0, duracion_sonido, 0
+
+Red
+Solid line
+Draw line: 0, 0, duracion_sonido, 0
+Black
+
+
+tier_tono_st = Create PitchTier: "tonoSt", 0, duracion_sonido
+
+for i to puntos
+	select textgrid
+		tiempo = Get time of point... estrato i
+		etiqueta$ = Get label of point... estrato i
+	select tablaValEsp
+		st = Get value: i, "StAlX"
+	select tier_tono_st
+		Add point: tiempo, st
+		Paint circle (mm): "Red", tiempo, st, 2
+		One mark bottom: tiempo, "no", "yes", "yes", etiqueta$
+endfor
+
+select tablaValEsp
+	st_inicio = Get value: 1, "StAlX"
+	st_final = Get value: puntos, "StAlX"
+
+Magenta
+Dashed line
+
+select tier_tono_st
+Draw: 0, 0, lim_inf, lim_sup, "no", "lines"
+
+
+#################################################################
+## borra inicio y final sobrante del estilizado ##
+#################################################################
+White
+Solid line
+Line width: 3
+Draw line: 0.0001, st_inicio, puntoIniTiempo, st_inicio
+Draw line: puntoFinTiempo, st_final, duracion_sonido, st_final
+Paint circle (mm): "Red", puntoIniTiempo, st_inicio, 2
+Paint circle (mm): "Red", puntoFinTiempo, st_final, 2
+Line width: 1
+Draw inner box
+Black
+Solid line
+
+
+
+# El formulario siguiente especifica el estrato con las marcas
+# especifica también el rango en Hz
+
+
+
+#####################################################################################################11111111111111111
+###############
+###################################
+###################################
+
+#######################################################################################1111111111
+#################################################################
+## redimensión del gráfico (2) para ser guardado
+## renombramiento y salvación
+#################################################################
+Select outer viewport: 0.2, 7.2, 4, 6.8
+extensionGraf2$ = "_stX.png"
+nombreGraf2$= nombreBase$ + extensionGraf2$
+Save as 600-dpi PNG file: directorioOriginalSonidos$ + "/graficos/" + nombreGraf2$
+#################################################################
+
+
+
+#################################################################
+## SALVACIÓN DE OBJETOS ##
+#################################################################
+# Salvado de objetos
+select tablaValEsp
+extensionTabla_E$ = "_Espe.Table"
+nombreTabla_E$= nombreBase$ + extensionTabla_E$
+Save as text file: directorioOriginalSonidos$ + "/especificas/" + nombreTabla_E$
+
+# Salvado de objetos
+select tablaValGenerales
+extensionTabla_G$ = "_Gene.Table"
+nombreTabla_G$= nombreBase$ + extensionTabla_G$
+Save as text file: directorioOriginalSonidos$ + "/generales/" + nombreTabla_G$
+
+selectObject: textgrid
+Save as text file: directorioOriginalSonidos$ + "/" + textgrid$
+selectObject: pitch
+Save as text file: directorioOriginalSonidos$ + "\" + pitch$
+
+removeObject: textgrid
+removeObject: sonido
+removeObject: pitch
+removeObject: tablaValEsp
+removeObject: tablaValGenerales
+removeObject: tier_tono_Hz 
+
+#removeObject: textGrid, sonido, pitch, tablaValEsp, tablaValGenerales, tier_tono_Hz 
+#################################################################
+## ELIMINACIÓN DE OBJETOS ##
+#################################################################
+endfor
