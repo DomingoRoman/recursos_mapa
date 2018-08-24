@@ -1,0 +1,442 @@
+# install.packages("readr")
+# library("readr")
+
+# casa
+setwd("/Users/imac/Documents/2018/arica_santiago")
+
+
+# lab
+setwd("/Users/imac/Documents/2018/arica_santiago")
+
+getwd()
+
+
+a <- read.csv2("data.csv")
+
+
+
+arica <- subset(a, loca =="Arica")
+
+
+
+stgo <- subset(a, loca =="Santiago")
+
+
+
+arica_enun <- subset(arica, X...modo =="enun")
+
+
+
+arica_inte <- subset(arica, X...modo =="inte")
+
+
+
+arica_enun_aa <- subset(arica_enun, comb == "aa")
+
+
+
+x_arica_enun_aa <- mean(arica_enun_aa[,6])
+
+
+
+arica_enun_gg <- subset(arica_enun, comb == "gg")
+
+
+
+x_arica_enun_gg <- mean(arica_enun_gg[,6])
+
+
+
+arica_enun_ee <- subset(arica_enun, comb == "ee")
+
+
+
+x_arica_enun_ee <- mean(arica_enun_ee[,6])
+
+
+
+arica_inte_aa <- subset(arica_inte, comb == "aa")
+
+x_arica_inte_aa <- mean(arica_inte_aa[,6])
+
+
+
+arica_inte_gg <- subset(arica_inte, comb == "gg")
+
+x_arica_inte_gg <- mean(arica_inte_aa[,6])
+
+
+
+arica_inte_ee <- subset(arica_inte, comb == "ee")
+
+x_arica_inte_ee <- mean(arica_inte_ee[,6])
+
+
+
+
+
+stgo_enun <- subset(stgo, X...modo =="enun")
+
+stgo_inte <- subset(stgo, X...modo =="inte")
+
+
+
+stgo_enun_aa <- subset(stgo_enun, comb == "aa")
+
+x_stgo_enun_aa <- mean(stgo_enun_aa[,6])
+
+
+
+stgo_enun_gg <- subset(stgo_enun, comb == "gg")
+
+x_stgo_enun_gg <- mean(stgo_enun_gg[,6])
+
+
+
+stgo_enun_ee <- subset(stgo_enun, comb == "ee")
+
+x_stgo_enun_ee <- mean(stgo_enun_ee[,6])
+
+
+
+stgo_inte_aa <- subset(stgo_inte, comb == "aa")
+
+x_stgo_inte_aa <- mean(stgo_inte_aa[,6])
+
+
+
+stgo_inte_gg <- subset(stgo_inte, comb == "gg")
+
+x_stgo_inte_gg <- mean(stgo_inte_gg[,6])
+
+
+
+stgo_inte_ee <- subset(stgo_inte, comb == "ee")
+
+x_stgo_inte_ee <- mean(stgo_inte_ee[,6])
+
+
+
+
+
+
+
+
+
+#########
+
+
+
+
+
+colorI = "darkorange2"
+colorE = "dodgerblue2 "
+
+
+
+colorA = "tan3"
+colorS = "skyblue4 "
+
+
+
+# gráfico exitoso:
+
+# Arica EE
+
+png('aric_ee.png')
+
+plot(arica_enun_ee[,6], type = "overplotted", pch = 0,col = colorE,ylab="Hz",xlab="Posicion", main="Interrogativas y enunciativas E-E (Arica)", axes=F, ylim=c(0,300))
+
+axis(1, at=1:12, lab= c("la", "cas*", "ca", "ra", "se", "sa*","ca","con","pa*","ni","co","fn"))
+
+par(new=T)
+
+plot(arica_inte_ee[,6], type = "overplotted", pch= 2,col = colorI, axes =FALSE, ylim=c(0,300), ylab=" ", xlab=" ")
+
+axis(2, at=NULL)
+
+box()
+
+abline(h=x_arica_enun_ee, col=colorE,lty=3,lwd=0.5 )
+
+abline(h=x_arica_inte_ee, col=colorI,lty=3,lwd=0.5)
+
+dev.off()
+
+
+
+
+
+# Arica GG
+
+png('aric_gg.png')
+
+plot(arica_enun_gg[,6], type = "overplotted", pch = 0, col = colorE,ylab="Hz",xlab="Posicion", main="Interrogativas y enunciativas G-G (Arica)", axes=F, ylim=c(0,300))
+
+axis(1, at=1:12, lab=c("la", "gui", "ta*", "ra", "se", "to*","ca","con","pa","cien*","cia","fn"))
+
+par(new=T)
+
+plot(arica_inte_gg[,6], type = "overplotted", col = colorI, axes =FALSE, ylim=c(0,300), ylab=" ", xlab=" ")
+
+axis(2, at=NULL)
+
+box()
+
+abline(h=x_arica_enun_gg, col=colorE,lty=3, lwd=0.5)
+
+abline(h=x_arica_inte_gg, col=colorI,lty=3,lwd=0.5)
+
+dev.off()
+
+
+
+# Arica AA
+
+png('aric_aa.png')
+
+plot(arica_enun_aa[,6], type = "overplotted", pch = 0, col = colorE,ylab="Hz",xlab="Posicion", main="Interrogativas y enunciativas A-A (Arica)", axes=F, ylim=c(0,300))
+
+axis(1, at=1:12, lab=c("el", "co", "ra", "zon*", "se", "cui*","da","co","nob","se","sion*","fn"))
+
+par(new=T)
+
+plot(arica_inte_gg[,6], type = "overplotted", col = colorI, axes =FALSE, ylim=c(0,300), ylab=" ", xlab=" ")
+
+axis(2, at=NULL)
+
+box()
+
+abline(h=x_arica_enun_aa, col=colorE,lty=3, lwd=0.5)
+
+abline(h=x_arica_inte_aa, col=colorI,lty=3, lwd=0.5)
+
+dev.off()
+
+
+
+
+
+# Santiago EE
+
+png('stgo_ee.png')
+
+plot(stgo_enun_ee[,6], type = "overplotted", pch = 0, col = colorE,ylab="Hz",xlab="Posicion", main="Interrogativas y enunciativas E-E (Santiago)", axes=F, ylim=c(0,300))
+
+axis(1, at=1:12, lab=c("la", "cas*", "ca", "ra", "se", "sa*","ca","con","pa*","ni","co","fn"))
+
+par(new=T)
+
+plot(stgo_inte_ee[,6], type = "overplotted", col = colorI, axes =FALSE, ylim=c(0,300), ylab=" ", xlab=" ")
+
+axis(2, at=NULL)
+
+box()
+
+abline(h=x_stgo_enun_ee, col=colorE,lty=3, lwd=0.5)
+
+abline(h=x_stgo_inte_ee, col=colorI,lty=3, lwd=0.5)
+
+dev.off()
+
+
+
+
+
+# Santiago GG
+
+png('stgo_gg.png')
+
+plot(stgo_enun_gg[,6], type = "overplotted",  pch = 0, col = colorE,ylab="Hz",xlab="Posicion", main="Interrogativas y enunciativas G-G (Santiago)", axes=F, ylim=c(0,300))
+
+axis(1, at=1:12, lab=c("la", "gui", "ta*", "ra", "se", "to*","ca","con","pa","cien*","cia","fn"))
+
+par(new=T)
+
+plot(stgo_inte_gg[,6], type = "overplotted", col = colorI, axes =FALSE, ylim=c(0,300), ylab=" ", xlab=" ")
+
+axis(2, at=NULL)
+
+box()
+
+abline(h=x_stgo_enun_gg, col=colorE,lty=3, lwd=0.5)
+
+abline(h=x_stgo_inte_gg, col=colorI,lty=3, lwd=0.5)
+
+dev.off()
+
+
+
+
+
+# Santiago AA
+
+png('stgo_aa.png')
+
+plot(stgo_enun_aa[,6], type = "overplotted",  pch = 0,  col = colorE,ylab="Hz",xlab="Posicion", main="Interrogativas y enunciativas A-A (Santiago)", axes=F, ylim=c(0,300))
+
+axis(1, at=1:12, lab=c("el", "co", "ra", "zon*", "se", "cui*","da","co","nob","se","sion*","fn"))
+
+par(new=T)
+
+plot(stgo_inte_aa[,6], type = "overplotted", col = colorI, axes =FALSE, ylim=c(0,300), ylab=" ", xlab=" ")
+
+axis(2, at=NULL)
+
+box()
+
+abline(h=x_stgo_enun_aa, col=colorE,lty=3, lwd=0.5)
+
+abline(h=x_stgo_inte_aa, col=colorI,lty=3, lwd=0.5)
+
+dev.off()
+
+
+
+
+
+# comparación la misma frase dos ciudades
+
+
+
+# Arica-Santiago EE enunciativas
+
+png('aricstgo_en_ee.png')
+
+plot(arica_enun_ee[,6], type = "overplotted",  pch = 0, col = colorA,ylab="Hz",xlab="Posicion", main="Enunciativas E-E (Arica-Santiago)", axes=F, ylim=c(0,300))
+
+axis(1, at=1:12, lab=c("la", "cas*", "ca", "ra", "se", "sa*","ca","con","pa*","ni","co","fn"))
+
+par(new=T)
+
+plot(stgo_enun_ee[,6], type = "overplotted", col = colorS, axes =FALSE, ylim=c(0,300), ylab=" ", xlab=" ")
+
+axis(2, at=NULL)
+
+box()
+
+abline(h=x_stgo_enun_ee, col=colorS,lty=3, lwd=0.5)
+
+abline(h=x_arica_enun_ee, col=colorA,lty=3, lwd=0.5)
+
+dev.off()
+
+
+
+# Arica-Santiago EE interrogativas
+
+png('aricstgo_in_ee.png')
+
+plot(arica_inte_ee[,6], type = "overplotted",  pch = 1, col = colorA,ylab="Hz",xlab="Posicion", main="Interrogativas E-E (Arica-Santiago)", axes=F, ylim=c(0,300))
+
+axis(1, at=1:12, lab=c("la", "cas*", "ca", "ra", "se", "sa*","ca","con","pa*","ni","co","fn"))
+
+par(new=T)
+
+plot(stgo_inte_ee[,6], type = "overplotted",  pch = 5,col = colorS, axes =FALSE, ylim=c(0,300), ylab=" ", xlab=" ")
+
+axis(2, at=NULL)
+
+box()
+
+abline(h=x_stgo_inte_ee, col=colorS,lty=3, lwd=0.5)
+
+abline(h=x_arica_inte_ee, col=colorA,lty=3, lwd=0.5)
+
+dev.off()
+
+
+
+# Arica-Santiago GG interrogativas
+
+png('aricstgo_in_gg.png')
+
+plot(arica_inte_gg[,6], type = "overplotted",  pch = 1, col = colorA,ylab="Hz",xlab="Posicion", main="Interrogativas G-G (Arica-Santiago)", axes=F, ylim=c(0,300))
+
+axis(1, at=1:12, lab=c("la", "gui", "ta*", "ra", "se", "to*","ca","con","pa","cien*","cia","fn"))
+
+par(new=T)
+
+plot(stgo_inte_gg[,6], type = "overplotted",  pch = 5,col = colorS, axes =FALSE, ylim=c(0,300), ylab=" ", xlab=" ")
+
+axis(2, at=NULL)
+
+box()
+
+abline(h=x_stgo_inte_gg, col=colorS,lty=3, lwd=0.5)
+
+abline(h=x_arica_inte_gg, col=colorA,lty=3, lwd=0.5)
+
+dev.off()
+
+
+
+# Arica-Santiago GG enunciativas
+
+png('aricstgo_en_gg.png')
+
+plot(arica_enun_gg[,6], type = "overplotted",  pch = 1, col = colorA,ylab="Hz",xlab="Posicion", main="Enunciativas G-G (Arica-Santiago)", axes=F, ylim=c(0,300))
+
+axis(1, at=1:12, lab=c("la", "gui", "ta*", "ra", "se", "to*","ca","con","pa","cien*","cia","fn"))
+
+par(new=T)
+
+plot(stgo_enun_gg[,6], type = "overplotted",  pch = 5, col = colorS, axes =FALSE, ylim=c(0,300), ylab=" ", xlab=" ")
+
+axis(2, at=NULL)
+
+box()
+
+abline(h=x_stgo_enun_gg, col=colorS,lty=3, lwd=0.5)
+
+abline(h=x_arica_enun_gg, col=colorA,lty=3, lwd=0.5)
+
+dev.off()
+
+
+
+# Arica-Santiago AA enunciativas
+
+png('aricstgo_en_aa.png')
+
+plot(arica_enun_aa[,6], type = "overplotted",  pch = 1, col = colorA,ylab="Hz",xlab="Posicion", main="Enunciativas A-A (Arica-Santiago)", axes=F, ylim=c(0,300))
+
+axis(1, at=1:12, lab=c("el", "co", "ra", "zon*", "se", "cui*","da","co","nob","se","sion*","fn"))
+
+par(new=T)
+
+plot(stgo_enun_aa[,6], type = "overplotted",  pch = 5, col = colorS, axes =FALSE, ylim=c(0,300), ylab=" ", xlab=" ")
+
+axis(2, at=NULL)
+
+box()
+
+abline(h=x_stgo_enun_aa, col=colorS,lty=3, lwd=0.5)
+
+abline(h=x_arica_enun_aa, col=colorA,lty=3, lwd=0.5)
+
+dev.off()
+
+
+
+# Arica-Santiago AA interrogativas
+
+png('aricstgo_in_aa.png')
+
+plot(arica_inte_aa[,6], type = "overplotted",  pch = 1, col = colorA,ylab="Hz",xlab="Posicion", main="Interrogativas A-A (Arica-Santiago)", axes=F, ylim=c(0,300))
+
+axis(1, at=1:12, lab=c("el", "co", "ra", "zon*", "se", "cui*","da","co","nob","se","sion*","fn"))
+
+par(new=T)
+
+plot(stgo_inte_aa[,6], type = "overplotted",  pch = 5, col = colorS, axes =FALSE, ylim=c(0,300), ylab=" ", xlab=" ")
+
+axis(2, at=NULL)
+
+box()
+
+abline(h=x_stgo_inte_aa, col=colorS,lty=3, lwd=0.5)
+
+abline(h=x_arica_inte_aa, col=colorA,lty=3, lwd=0.5)
+
+dev.off()
