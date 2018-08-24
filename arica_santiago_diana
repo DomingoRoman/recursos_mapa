@@ -2,39 +2,70 @@
 # library("readr")
 
 # casa
-setwd("/Users/imac/Documents/2018/arica_santiago")
-
-
+setwd("/Users/historiadores/Documents/Domingo/2018/aricastgo")
 # lab
 setwd("/Users/imac/Documents/2018/arica_santiago")
 
 getwd()
 
-
 a <- read.csv2("data.csv")
 
 
 
+
+
+
+
+
+###########
+###########
+a <- read.csv2("data2.csv")
+
+## Arica y Santiago
+arica <- subset(a, loca =="Aric")
+stgo <- subset(a, loca =="Sant")
+
+### ARICA: enunciativas e interrogativas
+arica_enun <- subset(arica, modo =="as")
+arica_inte <- subset(arica, modo =="in")
+
+#### ARICA: enunciativas
+arica_enun_sn_a <- subset(arica_enun, sn == "a")
+# Promedio enunciativas sintagma nominal agudo: "El corazón"
+x_arica_enun_sn_a <- mean(arica_enun_sn_a[,8])
+arica_enun_sn_g <- subset(arica_enun, sn == "g")
+x_arica_enun_sn_g <- mean(arica_enun_sn_g[,8])
+arica_enun_sn_e <- subset(arica_enun, sn == "e")
+x_arica_enun_sn_e <- mean(arica_enun_sn_e[,8])
+
+#### ARICA: interrogativas
+arica_inte_sn_a <- subset(arica_inte, sn == "a")
+# Promedio interrogativas sintagma nominal agudo: "El corazón"
+x_arica_inte_sn_a <- mean(arica_inte_sn_a[,8])
+arica_inte_sn_g <- subset(arica_inte, sn == "g")
+x_arica_inte_sn_g <- mean(arica_inte_sn_g[,8])
+arica_inte_sn_e <- subset(arica_inte, sn == "e")
+x_arica_inte_sn_e <- mean(arica_inte_sn_e[,8])
+
+###### plot de promedios por SN inicial
+png('aric_enun_inte_sn_AGE.png')
+plot(c(x_arica_enun_sn_a,x_arica_enun_sn_g,x_arica_enun_sn_e), axes=F,type = "overplotted", col = "blue", ylab="Hz",xlab="Sn de inicio", main="X  (Hz) enunciativas e interrogativas segun SN inicial", ylim=c(120,180))
+axis(1, at=1:3, lab= c("Agudo", "Grave", "Esdrujulo"))
+axis(2, at=NULL)
+
+par(new=T)
+
+plot(c(x_arica_inte_sn_a,x_arica_inte_sn_g,x_arica_inte_sn_e), axes=F, type = "overplotted", col = "red", ylim=c(120,180), ylab="",xlab="")
+box()
+dev.off()
+
 arica <- subset(a, loca =="Arica")
-
-
-
 stgo <- subset(a, loca =="Santiago")
 
-
-
 arica_enun <- subset(arica, X...modo =="enun")
-
-
-
 arica_inte <- subset(arica, X...modo =="inte")
 
-
-
 arica_enun_aa <- subset(arica_enun, comb == "aa")
-
-
-
 x_arica_enun_aa <- mean(arica_enun_aa[,6])
 
 
