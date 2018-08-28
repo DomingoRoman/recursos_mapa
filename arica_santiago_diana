@@ -10,7 +10,7 @@ getwd()
 
 ###########
 ###########
-# a <- read.csv2("data2.csv")
+a <- read.csv("data2.csv", sep=";", dec=",")
 
 ## Arica y Santiago
 arica <- subset(a, loca =="Aric")
