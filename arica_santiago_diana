@@ -6,12 +6,8 @@ setwd("/Users/historiadores/Documents/Domingo/2018/aricastgo")
 # lab
 setwd("/Users/imac/Documents/2018/arica_santiago")
 
-getwd()
-
-###########
-###########
 a <- read.csv("data2.csv", sep=";", dec=",")
-
+a
 ## Arica y Santiago
 arica <- subset(a, loca =="Aric")
 stgo <- subset(a, loca =="Sant")
@@ -19,6 +15,51 @@ stgo <- subset(a, loca =="Sant")
 ### ARICA: enunciativas e interrogativas
 arica_enun <- subset(arica, modo =="as")
 arica_inte <- subset(arica, modo =="in")
+stgo_enun <- subset(stgo, modo=="as")
+stgo_inte <- subset(stgo, modo=="in")
+
+# Promedios de enunciativas e interrogativas
+x_arica_enun <- mean(arica_enun[,9])
+x_arica_inte <- mean(arica_inte[,9])
+x_stgo_enun <- mean(stgo_enun[,9])
+x_stgo_inte <- mean(stgo_inte[,9])
+
+
+
+
+
+
+
+# Boxplot con promedios generales
+par(mfrow=c(1,1))
+par(mfrow=c(1,2))
+boxplot(arica_enun[,9],arica_inte[,9], axes=F,type = "overplotted", col = "grey96", ylab="Hz",xlab="Modalidad", main="Arica", ylim=c(100,350))
+axis(1, at=1:2, lab= c("Enun.", "Inte."))
+axis(2, at=NULL)
+box()
+boxplot(stgo_enun[,9],stgo_inte[,9], axes=F,type = "overplotted", col = "lavenderblush1",xlab="Modalidad", main="Santiago", ylim=c(100,350))
+axis(1, at=1:2, lab= c("Enun.", "Inte."))
+axis(4, at=NULL)
+box()
+
+
+
+
+par(mfrow=c(1,1))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #### ARICA: enunciativas  SN Agudo, Grave, esdrújulo
 # Promedio enunciativas sintagma nominal agudo: "El corazón"
@@ -30,6 +71,43 @@ x_arica_enun_sn_g <- mean(arica_enun_sn_g[,9])
 arica_enun_sn_e <- subset(arica_enun, sn == "e")
 x_arica_enun_sn_e <- mean(arica_enun_sn_e[,9])
 
+stgo_enun_sn_a <- subset(stgo_enun, sn == "a")
+x_stgo_enun_sn_a <- mean(stgo_enun_sn_a[,9])
+stgo_enun_sn_g <- subset(stgo_enun, sn == "g")
+x_stgo_enun_sn_g <- mean(stgo_enun_sn_g[,9])
+stgo_enun_sn_e <- subset(stgo_enun, sn == "e")
+x_stgo_enun_sn_e <- mean(stgo_enun_sn_e[,9])
+
+
+
+
+
+### un objeto para los tres casos por ciudad: SN Agudo, grave y esdrújulo
+aric_x_snAEG <- c(x_arica_enun_sn_a,x_arica_enun_sn_g,x_arica_enun_sn_e)
+stgo_x_snAEG <- c(x_stgo_enun_sn_a,x_stgo_enun_sn_g,x_stgo_enun_sn_e)
+
+
+
+
+arica_enun_sp_a <- subset(arica_enun, sn == "a")
+x_arica_enun_sp_a <- mean(arica_enun_sn_a[,9])
+arica_enun_sp_g <- subset(arica_enun, sn == "g")
+x_arica_enun_sp_g <- mean(arica_enun_sn_g[,9])
+arica_enun_sp_e <- subset(arica_enun, sn == "e")
+x_arica_enun_sp_e <- mean(arica_enun_sn_e[,9])
+
+stgo_enun_sn_a <- subset(stgo_enun, sn == "a")
+x_stgo_enun_sn_a <- mean(stgo_enun_sn_a[,9])
+stgo_enun_sn_g <- subset(stgo_enun, sn == "g")
+x_stgo_enun_sn_g <- mean(stgo_enun_sn_g[,9])
+stgo_enun_sn_e <- subset(stgo_enun, sn == "e")
+x_stgo_enun_sn_e <- mean(stgo_enun_sn_e[,9])
+
+
+
+
+
+
 #### ARICA: interrogativas SN Agudo, Grave, esdrújulo
 arica_inte_sn_a <- subset(arica_inte, sn == "a")
 # Promedio interrogativas sintagma nominal agudo: "El corazón"
@@ -39,7 +117,15 @@ x_arica_inte_sn_g <- mean(arica_inte_sn_g[,9])
 arica_inte_sn_e <- subset(arica_inte, sn == "e")
 x_arica_inte_sn_e <- mean(arica_inte_sn_e[,9])
 
-# Promedios por sintagma final 
+
+
+
+
+
+
+
+
+# Promedios por sintagma final
 # Enunciativas
 arica_enun_sp_a <- subset(arica_enun, sp == "a")
 x_arica_enun_sp_a <- mean(arica_enun_sp_a[,9])
@@ -56,16 +142,22 @@ x_arica_inte_sp_g <- mean(arica_inte_sp_g[,9])
 arica_inte_sp_e <- subset(arica_inte, sp == "e")
 x_arica_inte_sp_e <- mean(arica_inte_sp_e[,9])
 
-
-
 arica_enun_sn_a_sp_a <- subset(arica_enun_sn_a, sp == "a")
 arica_enun_sn_a_sp_g <- subset(arica_enun_sn_a, sp == "g")
 arica_enun_sn_a_sp_e <- subset(arica_enun_sn_a, sp == "e")
+
+
 x_arica_enun_sn_a_sp_a <- mean(arica_enun_sn_a_sp_a[,9])
 x_arica_enun_sn_a_sp_g <- mean(arica_enun_sn_a_sp_g[,9])
 x_arica_enun_sn_a_sp_e <- mean(arica_enun_sn_a_sp_e[,9])
 
-plot(c(x_arica_enun_sn_a_sp_a,x_arica_enun_sn_a_sp_g,x_arica_enun_sn_a_sp_e))
+
+
+
+
+
+
+
 
 
 arica_enun_sn_g_sp_a
@@ -83,17 +175,29 @@ arica_inte_sn_a_sp_g
 arica_inte_sn_a_sp_e
 
 
+### Plot
 
 
+# ploteo promedios generales Arica y Santiago. Figura 1
 
+png('aric_stgo_x_gen_enun_inte')
+plot(c(x_arica_enun,x_stgo_enun), axes=F,type = "overplotted", col = "blue", ylab="Hz",xlab="Localidades", main="X  (Hz) enunciativas e interrogativas Arica y Santiago", ylim=c(120,170))
+axis(1, at=1:2, lab= c("Arica", "Santiago"))
+axis(2, at=NULL)
+par(new=T)
+plot(c(x_arica_inte,x_stgo_inte), axes=F,type = "overplotted", col = "red", ylab="Hz",xlab="Localidades", main="X  (Hz) enunciativas e interrogativas Arica y Santiago", ylim=c(120,170))
+box()
+dev.off()
 
+# compara promedios snAEG Arica Santiago
 
+plot(c(aric_x_snAEG), axes=F,type = "overplotted", col = "red", ylab="Hz",xlab="palabra en s. nominal", main="X  (Hz) enu. int. por S. nominal Arica y Santiago", ylim=c(120,170))
+axis(1, at=1:3, lab= c("Agudo", "Grave", "Esdrujulo"))
+axis(2, at=NULL)
+par(new=T)
+plot(c(stgo_x_snAEG), axes=F, type = "overplotted", col = "blue", ylim=c(120,170), ylab="",xlab="")
+box()
 
-
-
-################################
-###### GRÁFICOS ################
-################################
 
 ###### plot de promedios por SN inicial
 png('aric_enun_inte_sn_AGE.png')
@@ -126,7 +230,6 @@ par(new=T)
 plot(c(x_arica_inte_sp_a,x_arica_inte_sp_g,x_arica_inte_sp_e), axes=F, type = "overplotted", col = "red", ylim=c(120,170), ylab="",xlab="")
 box()
 dev.off()
-
 
 
 ################################
