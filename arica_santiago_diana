@@ -16,6 +16,10 @@ a
 setwd("/Users/Mapa/Documents/2018/aricastgo")
 getwd()
 
+# lab
+setwd("/Users/imac/Documents/2018/arica_santiago")
+
+a <- read.csv("data2.csv", sep=";", dec=",")
 a
 ## Arica y Santiago
 arica <- subset(a, loca =="Aric")
