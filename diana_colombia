@@ -1,5 +1,7 @@
 # 
 # Crear las dos tablas
+tabla_01: Create Table with column names: "table_01", [n de silabas], "nombres delas columnas"
+tabla_02: Create Table with column names: "table_02", [n de silabas], "nombres delas columnas"
 # columnas de la tabla uno:
 #
 # columnas de la tabla dos:
