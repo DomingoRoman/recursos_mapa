@@ -1,0 +1,47 @@
+
+#selección del TextGrid
+
+archivo$ = selected$("TextGrid")
+
+# establece el número de tiers
+
+n_tiers = Get number of tiers
+
+# nombre de cada tier
+
+nombre_tier_1$ = Get tier name: 1
+nombre_tier_2$ = Get tier name: 2
+nombre_tier_3$ = Get tier name: 3
+
+# tipo de cada tier
+
+tipo_tier_1 = Is interval tier: 1
+tipo_tier_2 = Is interval tier: 2
+tipo_tier_3 = Is interval tier: 3
+
+# condición para el número y nombre y tipo de tiers
+
+if n_tiers = 3 and nombre_tier_1$ ="voc" and nombre_tier_2$ ="frs" and nombre_tier_3$ = "sil"
+	error = 0
+else 
+  error = 10
+endif
+
+
+if tipo_tier_1 = 1
+	error = 11
+  elsif tipo_tier_2= 0
+  error = 21
+  elsif tipo_tier_3 = 0
+  error = 31
+endif
+
+tabla = Read Table from comma-separated file: "/home/mapa2/Documentos/nucleo/tabla_general_datos_audio.Table"
+
+Append row
+
+n_datos = Get number of rows
+
+Set string value: n_datos, "archivo", archivo$
+Set numeric value: n_datos,"error",error
+
