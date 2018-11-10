@@ -1,10 +1,15 @@
 # Verifica número de tiers, nombre y tipo de cada uno
 # Entrega una tabla de dos columnas: archivo y error
+#######################################
 ## Error  0: no hay error
 ## Error 10: no tiene 3 tiers
 ## Error 11: error en el tier 1
 ## Error 21: error en el tier 2
 ## Error 31: error en el tier 3
+#######################################
+
+
+
 
 #selección del TextGrid
 
